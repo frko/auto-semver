@@ -1,0 +1,15 @@
+### Maven Wrapper ###
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/settings.xml
+
+### Maven ###
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+**/.flattened-pom.xml
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
