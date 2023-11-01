@@ -5,7 +5,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 
 @Mojo(name = "require-major-mainline-version-scheme", defaultPhase = LifecyclePhase.NONE, threadSafe = true)
-class RequireMajorVersionScheme: SemverVersionManager() {
+class RequireMajorMainlineVersionScheme: SemverVersionManager() {
 
     override fun execute() {
         majorMainlineVersion() ?: throw MojoExecutionException(
