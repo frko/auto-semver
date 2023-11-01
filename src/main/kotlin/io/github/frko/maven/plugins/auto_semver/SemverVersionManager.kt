@@ -15,7 +15,7 @@ import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.resolution.VersionRangeRequest
 import org.twdata.maven.mojoexecutor.MojoExecutor.*
 
-private val MAJOR_MAINLINE_VERSION_SCHEME = "(\\d+)\\.x\\.x".toRegex()
+internal val MAJOR_MAINLINE_VERSION_SCHEME = "(\\d+)\\.x\\.x".toRegex()
 
 abstract class SemverVersionManager: AbstractMojo() {
 
@@ -111,7 +111,7 @@ abstract class SemverVersionManager: AbstractMojo() {
             }
     }
 
-    private fun majorMainlineVersion(): Semver? {
+    internal fun majorMainlineVersion(): Semver? {
         val match = MAJOR_MAINLINE_VERSION_SCHEME.matchEntire(project.version)
             ?: return null
 

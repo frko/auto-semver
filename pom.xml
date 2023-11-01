@@ -10,7 +10,7 @@
 
     <groupId>io.github.frko.maven.plugins</groupId>
     <artifactId>auto-semver</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <packaging>maven-plugin</packaging>
 
     <properties>
