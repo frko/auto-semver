@@ -43,9 +43,32 @@ abstract class SemverVersionManager: AbstractMojo() {
     internal fun latestStableSemverForMajor(): Semver {
         log.info("auto-semver.major-mainlines-only = '${allowOnlyMajorMainlineVersions}'.")
 
-        val semver = semverMajorVersion()
-        log.info("managing semver major version '${semver.major}'.")
+        val major = semverMajorVersion()
+        log.info("managing semver major version '${major.major}'.")
 
+        val versions = collectExistingSemverVersionsForMajor(major)
+
+        return latestOrNewSemverVersion(versions, major)
+    }
+
+    private fun latestOrNewSemverVersion(
+        versions: List<Semver>,
+        major: Semver,
+    ): Semver = if (versions.isNotEmpty()) {
+        log.info("semver versions found ['${versions.joinToString("', '")}'].")
+        val last = versions.last()
+        log.info("last semver version for major '${major.major}' = '${last}'.")
+        last
+    } else {
+        log.info("no existing semver versions found.")
+        val nothing = Semver("${major.major}.0.0")
+        log.info("semver major version for new artifact = '${major.major}'.")
+        nothing
+    }
+
+    private fun collectExistingSemverVersionsForMajor(
+        semver: Semver
+    ): List<Semver> {
         val artifact = DefaultArtifact("${project.groupId}:${project.artifactId}:${project.packaging}:[${semver.major},${semver.nextMajor().major}]")
         val request = VersionRangeRequest(artifact, repositories, "")
 
@@ -53,7 +76,7 @@ abstract class SemverVersionManager: AbstractMojo() {
         val result = system.resolveVersionRange(repositorySystemSession, request)
         log.info("versions in reactor & repositories ['${result.versions.joinToString("', '")}'].")
 
-        val versions = result.versions.mapNotNull { version ->
+        return result.versions.mapNotNull { version ->
             runCatching { Semver(version.toString()) }
                 .onFailure { log.warn("ignoring non semver compatible version '${version}'.") }
                 .getOrNull()
@@ -72,20 +95,6 @@ abstract class SemverVersionManager: AbstractMojo() {
                 else -> 0
             }
         }
-
-        val proposal = if (versions.isNotEmpty()) {
-            log.info("semver versions found ['${versions.joinToString("', '")}'].")
-            val last = versions.last()
-            log.info("last semver version for major '${semver.major}' = '${last}'.")
-            last
-        } else {
-            log.info("no existing semver versions found.")
-            val nothing = Semver("${semver.major}.0.0")
-            log.info("semver major version for new artifact = '${semver.major}'.")
-            nothing
-        }
-
-        return proposal
     }
 
     private fun semverMajorVersion(): Semver {
