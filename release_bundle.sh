@@ -8,7 +8,7 @@ ARTIFACT_VERSION=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.4.0:evalu
 GROUP_ID=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.4.0:evaluate -Dexpression=project.groupId -q -DforceStdout)
 ARTIFACT_ID=$(./mvnw org.apache.maven.plugins:maven-help-plugin:3.4.0:evaluate -Dexpression=project.artifactId -q -DforceStdout)
 
-mvn versions:set -DnewVersion=${ARTIFACT_VERSION} -DgenerateBackupPoms=false
+mvn versions:set -DnewVersion="${ARTIFACT_VERSION}" -DgenerateBackupPoms=false
 ./mvnw -Possrh clean deploy -DskipTests -DaltDeploymentRepository=ossrh::file:./target/.m2
 
 CURRENT_DIR=$(pwd)
