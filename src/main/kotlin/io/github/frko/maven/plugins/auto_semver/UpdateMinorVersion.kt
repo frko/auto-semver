@@ -6,13 +6,10 @@ import org.apache.maven.plugins.annotations.Mojo
 @Mojo(name = "increment-minor", defaultPhase = LifecyclePhase.NONE, threadSafe = true)
 class UpdateMinorVersion: SemverVersionManager() {
 
-    override fun execute() {
-        if (project.hasParent()) {
-            log.info("skipping module '${project.name}'")
-            return
-        }
+    override fun execute() = execute {
         val latest = latestStableSemverForMajor()
         val next = latest.nextMinor()
+        log.info("new semver version proposal '${next}'.")
         updateSemverVersion(next)
     }
 }
