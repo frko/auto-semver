@@ -20,6 +20,9 @@ class UpdateSnapshotPatchVersion: SemverVersionManager() {
 
 internal fun requireSnapshotOrSuffixlessVersion(latest: Semver) {
     val suffixes = latest.suffixTokens
+
+    if (suffixes.isEmpty()) return
+
     if (suffixes.size > 1) throw MojoExecutionException(
         "semver version '$latest' has multiple suffixes."
     )
