@@ -80,14 +80,6 @@ abstract class SemverVersionManager: AbstractMojo() {
             runCatching { Semver(version.toString()) }
                 .onFailure { log.warn("ignoring non semver compatible version '${version}'.") }
                 .getOrNull()
-        }.filter {
-            val suffixes = it.getSuffixTokens().orEmpty()
-
-            if (suffixes.isNotEmpty()) {
-                log.warn("ignoring version with suffix '${it}'.")
-            }
-
-            suffixes.isEmpty()
         }.sortedWith { v1, v2 ->
             when {
                 v1.isGreaterThan(v2) -> 1
